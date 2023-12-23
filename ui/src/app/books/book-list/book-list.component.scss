@@ -1,0 +1,14 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+.action-th {
+  min-width: 110px;
+}
+
+@include media-breakpoint-down(md) {
+  .search-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+}

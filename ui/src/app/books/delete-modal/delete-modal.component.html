@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <h4 class="modal-title">Delete Confirmation</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <strong
+    >Are you sure you want to delete the book titled "{{ book.title }}"?</strong
+  >
+
+  <p class="mt-2">
+    All information associated to this book will be permanently deleted.
+    <span class="text-danger">This operation can not be undone.</span>
+  </p>
+</div>
+<div class="modal-footer text-center">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="clickEvent(false)"
+  >
+    Cancel
+  </button>
+
+  <button type="button" class="btn btn-danger" (click)="clickEvent(true)">
+    Yes
+  </button>
+</div>

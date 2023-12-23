@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    build:
+      context: ./app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/library
+      JWT_SECRET: OCjkTp+YCCFcPPiyZLiok4InyAJzrMivL6cu2ZcyKFtVDXifIkVG9C3OJ276vE+VCbHR63U5nq+MZH15DJ1dYgtQJ6/hrdaN42ZbEqZ2SR5msMdb9dkDGRefHvNwSUpMXffhe5GwXZAIXkYJZ3F8YCWWHqRyO5VOBtaUozr3sTKvWaaCP3dWftsH3UJZFNOG87t/sANyOV9ng6c0AhKrTK11NbFUE7LQU1Y9zumWovtV/RAXbC4f0XCr5mJAa9o0UFraHaF+l6ZmxxSufNAtOYvYMBMQn3bWkqg8656H+b5tuA8Kiw2sh2FlgibLtiaEpMQgjGSjMzs8O82pjH3XrA==
+    volumes:
+      - ./app:/usr/src/app  # Mount the app directory for hot reloading
+
+  ui:
+    build:
+      context: ./ui
+    ports:
+      - "4200:4200"
+    depends_on:
+      - app
+    volumes:
+      - ./ui:/usr/src/app # Mount the app directory for hot reloading
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"

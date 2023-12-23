@@ -1,0 +1,72 @@
+<main class="form-signin w-100 m-auto">
+  <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()" novalidate>
+    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+    <div class="form-floating">
+      <input
+        type="email"
+        class="form-control"
+        id="username"
+        formControlName="username"
+        [ngClass]="{
+          'has-error':
+            !loginFormGroup.controls.username.valid &&
+            loginFormGroup.controls.username.touched
+        }"
+      />
+      <label for="username">Email address</label>
+
+      <span
+        class="text-danger"
+        *ngIf="
+          loginFormGroup.controls.username.errors?.required &&
+          loginFormGroup.controls.username.touched
+        "
+      >
+        The email is required
+      </span>
+
+      <span
+        class="text-danger"
+        *ngIf="
+          loginFormGroup.controls.username.errors?.email &&
+          loginFormGroup.controls.username.touched
+        "
+      >
+        The email is not valid
+      </span>
+    </div>
+    <div class="form-floating">
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        formControlName="password"
+        [ngClass]="{
+          'has-error':
+            !loginFormGroup.controls.password.valid &&
+            loginFormGroup.controls.password.touched
+        }"
+      />
+      <label for="password">Password</label>
+
+      <span
+        class="text-danger"
+        *ngIf="
+          loginFormGroup.controls.password.errors?.required &&
+          loginFormGroup.controls.password.touched
+        "
+      >
+        The email is required
+      </span>
+    </div>
+
+    <button
+      class="btn btn-primary w-100 py-2 mt-3"
+      type="submit"
+      [disabled]="!loginFormGroup.valid"
+    >
+      Sign in
+    </button>
+  </form>
+</main>

@@ -1,0 +1,118 @@
+<div class="row d-flex">
+  <div class="col-6">
+    <h1>{{ isNew ? "Create new book" : "Edit book" }}</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="bookFormGroup" (ngSubmit)="onSubmit()" novalidate>
+          <div class="mb-3">
+            <label for="title" class="form-label">Book Title:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              formControlName="title"
+              [ngClass]="{
+                'has-error':
+                  !bookFormGroup.controls.title.valid &&
+                  bookFormGroup.controls.title.touched
+              }"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                bookFormGroup.controls.title.errors?.required &&
+                bookFormGroup.controls.title.touched
+              "
+            >
+              The title is required
+            </span>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea
+              class="form-control"
+              id="description"
+              formControlName="description"
+              rows="5"
+              [ngClass]="{
+                'has-error':
+                  !bookFormGroup.controls.description.valid &&
+                  bookFormGroup.controls.description.touched
+              }"
+            ></textarea>
+            <span
+              class="text-danger"
+              *ngIf="
+                bookFormGroup.controls.description.errors?.required &&
+                bookFormGroup.controls.description.touched
+              "
+            >
+              The description is required
+            </span>
+          </div>
+
+          <div class="mb-3">
+            <label for="author" class="form-label">Author:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="author"
+              formControlName="author"
+              [ngClass]="{
+                'has-error':
+                  !bookFormGroup.controls.author.valid &&
+                  bookFormGroup.controls.author.touched
+              }"
+            />
+            <span
+              class="text-danger"
+              *ngIf="
+                bookFormGroup.controls.author.errors?.required &&
+                bookFormGroup.controls.author.touched
+              "
+            >
+              The author is required
+            </span>
+          </div>
+
+          <div class="mb-3" *ngIf="errorMessages.length">
+            <div class="alert alert-danger" role="alert">
+              <ul class="m-0">
+                <li *ngFor="let errorMessage of errorMessages">
+                  {{ errorMessage }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="">
+            <button
+              type="button"
+              class="btn btn-secondary me-2"
+              (click)="goToList()"
+            >
+              <i class="bi bi-arrow-left"></i> Cancel
+            </button>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!bookFormGroup.valid"
+            >
+              <i class="bi bi-journal-plus" *ngIf="isNew"></i>
+              <i class="bi bi-journal-check" *ngIf="!isNew"></i>
+              {{ isNew ? "Create" : "Update" }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

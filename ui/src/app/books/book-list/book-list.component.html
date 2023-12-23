@@ -1,0 +1,161 @@
+<div class="row d-flex">
+  <div class="col-6">
+    <h1>Book List</h1>
+  </div>
+  <div class="col-6 text-end">
+    <button type="button" class="btn btn-primary mt-2" (click)="goToNewBook()">
+      Add Book
+    </button>
+  </div>
+</div>
+
+<div *ngIf="books$ | async as bookResult">
+  <div class="row mt-5 mb-1">
+    <div class="col-12 col-md-6 order-2 order-md-1 mb-2 mb-md-0">
+      <form novalidate #searchForm="ngForm" (ngSubmit)="onSubmit(searchForm)">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-auto">
+            <input
+              id="search"
+              name="search"
+              type="text"
+              class="form-control"
+              placeholder="Search by title"
+              ngModel
+              #search="ngModel"
+            />
+          </div>
+          <div class="col-12 col-md-auto">
+            <button type="submit" class="btn btn-secondary search-btn">
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-12 col-md-6 order-1 order-md-2 mb-2 mb-md-0">
+      <div class="row align-items-center justify-content-end">
+        <div class="col-12 col-md-auto">
+          <label for="sorting"> Sort By: </label>
+        </div>
+        <div class="col-12 col-md-auto">
+          <select
+            id="sorting"
+            class="form-select"
+            [ngModel]="sortByField"
+            (ngModelChange)="onChangeSorting($event)"
+          >
+            <option value="title">Title</option>
+            <option value="description">Description</option>
+            <option value="author">Author</option>
+            <option value="createdAt">Creation Date</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="bookResult.total > 0">
+    <div class="col-12 table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col" class="d-none d-md-table-cell">Description</th>
+            <th scope="col">Author</th>
+            <th scope="col" class="d-none d-md-table-cell">Created At</th>
+            <th scope="col" class="action-th" *ngIf="isAuth$ | async">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let book of bookResult.books">
+            <td class="align-middle">
+              <i class="bi bi-journal-bookmark-fill d-none d-md-inline"></i>
+              {{ book.title }}
+            </td>
+            <td
+              [title]="book.description"
+              class="align-middle d-none d-md-table-cell"
+            >
+              {{ book.description | slice : 0 : 50
+              }}{{ book.description.length > 50 ? "..." : "" }}
+            </td>
+            <td class="align-middle">
+              <i class="bi bi-person-square d-none d-md-inline"></i>
+              {{ book.author }}
+            </td>
+            <td class="align-middle d-none d-md-table-cell">
+              <i class="bi bi-calendar3 d-none d-md-inline"></i>
+              {{ book.createdAt | date : "medium" }}
+            </td>
+            <td class="align-middle" *ngIf="isAuth$ | async">
+              <button
+                type="button"
+                class="btn btn-secondary me-1 me-md-2"
+                (click)="goToEditBook(book._id)"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="onDelete(book)"
+              >
+                <i class="bi bi-trash3"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="">
+        <ngb-pagination
+          [collectionSize]="bookResult.total"
+          [page]="page"
+          [pageSize]="pageSize"
+          class="d-flex justify-content-center"
+          (pageChange)="onPageChange($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="bookResult.total == 0">
+    <div class="p-5 mt-4 bg-body-tertiary rounded-3">
+      <div class="py-5">
+        <h1 class="display-5 fw-bold">No Books!</h1>
+        <p class="col-md-8 fs-4" *ngIf="currentFilter.search">
+          There are currently zero books matching the title "{{
+            currentFilter.search
+          }}"
+        </p>
+        <p class="col-md-8 fs-4" *ngIf="!currentFilter.search">
+          There are no books created so far. Please add a new book using the
+          button below.
+        </p>
+
+        <button
+          class="btn btn-primary btn-lg"
+          type="button"
+          *ngIf="!currentFilter.search"
+          (click)="goToNewBook()"
+        >
+          Add New Book
+        </button>
+
+        <button
+          class="btn btn-primary btn-lg"
+          type="button"
+          *ngIf="currentFilter.search"
+          (click)="resetFilters()"
+        >
+          Reset filters
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
